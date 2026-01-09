@@ -1,0 +1,56 @@
+
+========================================================================
+HUMAN EVALUATION RUBRIC FOR EMPATHETIC CONVERSATIONS
+========================================================================
+
+INSTRUCTIONS:
+For each sample, rate on a scale of 1-5 in the following categories:
+
+1. EMPATHY SCORE (1-5)
+   5 - Highly empathetic, shows deep understanding of emotions
+   4 - Empathetic, acknowledges feelings appropriately
+   3 - Somewhat empathetic, basic emotional recognition
+   2 - Limited empathy, mostly factual response
+   1 - No empathy, cold or dismissive
+
+2. RELEVANCE SCORE (1-5)
+   5 - Perfectly addresses the question/concern
+   4 - Addresses main points well
+   3 - Partially relevant, misses some points
+   2 - Somewhat off-topic
+   1 - Completely irrelevant
+
+3. LANGUAGE QUALITY SCORE (1-5)
+   5 - Perfect Bengali, natural and fluent
+   4 - Good Bengali, minor issues
+   3 - Acceptable Bengali, some grammatical errors
+   2 - Poor Bengali, many errors
+   1 - Incomprehensible or wrong language
+
+4. OVERALL SCORE (1-5)
+   5 - Excellent response, would help the person
+   4 - Good response, helpful
+   3 - Acceptable response, somewhat helpful
+   2 - Poor response, not very helpful
+   1 - Bad response, unhelpful or harmful
+
+EXAMPLES:
+
+Example 1 - High Quality (4-5):
+Question: "আমি চাকরি হারিয়েছি এবং খুব দুশ্চিন্তায় আছি।"
+Response: "আমি বুঝতে পারছি এটা আপনার জন্য কতটা কঠিন সময়। চাকরি হারানো 
+সত্যিই মানসিক চাপের বিষয়। তবে মনে রাখবেন, এটি একটি সাময়িক সমস্যা এবং 
+নতুন সুযোগ আসবে।"
+→ Empathy: 5, Relevance: 5, Language: 5, Overall: 5
+
+Example 2 - Medium Quality (3):
+Question: "কেউ আমাকে বোঝে না।"
+Response: "এটা কঠিন। আপনি কথা বলতে পারেন।"
+→ Empathy: 3, Relevance: 3, Language: 4, Overall: 3
+
+Example 3 - Low Quality (1-2):
+Question: "পরীক্ষায় ফেল করেছি।"
+Response: "আবার চেষ্টা করুন।"
+→ Empathy: 2, Relevance: 2, Language: 4, Overall: 2
+
+========================================================================

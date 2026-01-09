@@ -1,0 +1,17 @@
+EVALUATION METRICS SUMMARY
+======================================================================
+
+           Metric             Value                         Interpretation
+    Training Loss            0.5423       Lower is better (model learning)
+       Perplexity 311.8839452004458     Lower is better (model confidence)
+          ROUGE-1            0.1151     Higher is better (unigram overlap)
+          ROUGE-2            0.0093      Higher is better (bigram overlap)
+          ROUGE-L            0.0990    Higher is better (longest sequence)
+             BLEU              7.76 Higher is better (translation quality)
+Samples Evaluated                50                 Number of test samples
+
+======================================================================
+Model: meta-llama/Meta-Llama-3.1-8B-Instruct
+Training Configuration: LoRA (r=8, alpha=16)
+Dataset: Bengali Empathetic Conversations (4000 samples)
+Training Steps: 1000
