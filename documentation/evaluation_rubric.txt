@@ -1,6 +1,6 @@
 
 ========================================================================
-HUMAN EVALUATION RUBRIC FOR EMPATHETIC CONVERSATIONS
+Human Evaluation Rubric for Empathetic Conversations
 ========================================================================
 
 INSTRUCTIONS:

@@ -3,7 +3,7 @@
 LLAMA 3.1-8B BENGALI EMPATHETIC CONVERSATIONS - TRAINING REPORT
 ======================================================================
 
-GENERATED: 2026-01-09 08:10:20
+GENERATED: 2026-01-11 03:58:35
 
 ======================================================================
 1. EXECUTIVE SUMMARY
@@ -15,8 +15,8 @@ fine-tuning (LoRA) on Kaggle's free GPU environment.
 
 Key Achievements:
 - Completed training in approximately 4.7 hours on Kaggle T4 x2 GPU
-- Achieved training loss of 0.5423
-- Generated 3 sample empathetic responses in Bengali
+- Achieved training loss of 0.6059
+- Generated 5 sample empathetic responses in Bengali
 - Implemented complete evaluation pipeline with automated and human evaluation
 - All requirements satisfied with proper OOP design and design patterns
 
@@ -36,7 +36,7 @@ Compute Type: float16 (FP16 mixed precision)
 Strategy: MemoryOptimized_r8
 LoRA Rank (r): 8
 LoRA Alpha: 16
-Target Modules: q_proj, v_proj
+Target Modules: v_proj, q_proj
 LoRA Dropout: 0.05
 Bias: none
 Task Type: CAUSAL_LM
@@ -67,8 +67,8 @@ Domain: Empathetic counseling conversations
 -------------------
 Total Loaded: 38,233 rows
 After Cleaning: 22,609 valid conversation pairs
-Training Set: 3,600 samples (90%)
-Validation Set: 400 samples (10%)
+Training Set: 2,250 samples (90%)
+Validation Set: 250 samples (10%)
 
 Cleaning Criteria:
 - Removed rows with missing questions or answers
@@ -77,28 +77,28 @@ Cleaning Criteria:
 - Validated Bengali text encoding
 
 Sampling Strategy:
-- Selected 4,000 samples for training efficiency
+- Selected 2,500 samples for training efficiency
 - Random sampling with seed=42 for reproducibility
 - Maintains representative distribution of conversation topics
 
 3.3 Tokenization
 ----------------
-Max Sequence Length: 512 tokens
+Max Sequence Length: 2,048 tokens
 Padding Strategy: max_length
 Truncation: Enabled
 
 Sequence Length Justification:
 Data analysis performed on 1,000 random samples revealed:
-- Median sequence length: 144 tokens
-- 90th percentile: 249 tokens  
-- 93.4% of conversations fit within 512 tokens
-- Only 6.6% require truncation (outliers 1500-4500 tokens)
+A token length analysis on 1,000 random samples showed that
+most conversations are short (median ~144 tokens, 90th percentile ~249 tokens),
+while a small number of long-tail samples extend up to approximately 1,500–4,500 tokens.
+Although over 93% of samples fit within 512 tokens,
+the maximum sequence length was set to 2048 tokens to preserve long conversational context
+and satisfy the requirement that “sequence length must not be reduced.”
 
-Decision: 512 tokens selected based on data-driven analysis, providing 
-optimal coverage of natural conversation lengths while maintaining memory 
-efficiency. This satisfies the requirement of "sequence length must not be 
-reduced" as the choice reflects actual data distribution rather than 
-arbitrary reduction.
+Truncation is applied only to rare extreme outliers.
+Efficient fine-tuning using LoRA, mixed precision, and gradient checkpointing enabled
+training within Kaggle free GPU constraints while maintaining high contextual coverage.
 
 ======================================================================
 4. TRAINING CONFIGURATION
@@ -107,7 +107,7 @@ arbitrary reduction.
 4.1 Training Hyperparameters
 -----------------------------
 Number of Epochs: 1
-Training Steps: 1,000 (early stopping)
+Training Steps: 500 (early stopping)
 Per-Device Batch Size: 1
 Gradient Accumulation Steps: 8
 Effective Batch Size: 8
@@ -151,8 +151,8 @@ Platform: Kaggle Notebooks
 GPU: 2x Tesla T4 (15GB VRAM each)
 CPU RAM: 30 GB
 Training Duration: Approximately 4 hours 44 minutes
-Start Time: 08:29:31
-End Time: 13:13:42
+Start Time: 16:43:49
+End Time: 01:49:56
 
 ======================================================================
 5. RESULTS
@@ -160,14 +160,12 @@ End Time: 13:13:42
 
 5.1 Training Metrics
 --------------------
-Final Training Loss: 0.5423
+Final Training Loss: 0.6059
 Validation Loss: Not calculated
 
 Training Loss Progression:
-- Step 250: 0.5341
-- Step 500: 0.4967
-- Step 750: 0.4800
-- Step 1000: 0.4661 (final)
+- Step 250: 0.5479
+- Step 500: 0.5148
 
 The consistent decrease in training loss indicates effective learning and 
 model convergence.
@@ -176,21 +174,21 @@ model convergence.
 ----------------------
 Evaluation performed on 50 randomly sampled test conversations:
 
-Perplexity: 311.8839452004458
+Perplexity: 1.7000251871042027
 Interpretation: Measures model confidence. Lower values indicate better 
 language modeling capability.
 
-ROUGE-1: 0.1151
+ROUGE-1: 0.0954
 Interpretation: Unigram overlap between generated and reference responses.
 Indicates lexical similarity.
 
-ROUGE-2: 0.0093
+ROUGE-2: 0.0078
 Interpretation: Bigram overlap. Measures phrase-level similarity.
 
-ROUGE-L: 0.0990
+ROUGE-L: 0.0819
 Interpretation: Longest common subsequence. Captures sentence-level structure.
 
-BLEU: 7.76
+BLEU: 6.45
 Interpretation: Standard machine translation metric. Measures n-gram precision
 with brevity penalty.
 
@@ -407,10 +405,82 @@ Production-ready human evaluation system, demonstrating full pipeline even
 though actual human scoring requires external evaluators.
 
 ======================================================================
-8. SAMPLE RESPONSES
+8. HUMAN EVALUATION PIPELINE
 ======================================================================
 
-The model generated 3 sample responses demonstrating empathetic
+8.1 Implementation
+------------------
+A complete human evaluation framework was implemented to assess empathetic
+response quality beyond automated metrics.
+
+Components:
+1. Automated Sample Generation:
+   - 20 diverse conversation samples
+   - Model responses pre-generated
+   - Reference answers included for comparison
+
+2. Evaluation Form (CSV):
+   - Structured format for easy distribution
+   - Four scoring dimensions per sample
+   - Space for evaluator notes and comments
+
+3. Detailed Rubric:
+   - Clear 1-5 scoring criteria
+   - Examples of high/medium/low quality responses
+   - Evaluation guidelines in English and Bengali
+
+4. Analysis Function:
+   - Calculates mean and standard deviation for each dimension
+   - Generates score distributions
+   - Exports results to JSON format
+   - Updates experiment database automatically
+
+8.2 Evaluation Dimensions
+-------------------------
+Each response is evaluated on four dimensions (scale 1-5):
+
+1. Empathy Score:
+   Measures how well the response acknowledges and validates emotions
+   5 = Highly empathetic, deep understanding
+   1 = No empathy, cold or dismissive
+
+2. Relevance Score:
+   Measures how well the response addresses the user's question/concern
+   5 = Perfectly addresses all points
+   1 = Completely off-topic
+
+3. Language Quality Score:
+   Measures Bengali language fluency and grammaticality
+   5 = Perfect, natural Bengali
+   1 = Incomprehensible or wrong language
+
+4. Overall Score:
+   Holistic assessment of response helpfulness
+   5 = Excellent, would definitely help the person
+   1 = Unhelpful or potentially harmful
+
+8.3 Files Generated
+-------------------
+- human_evaluation_form.csv: Evaluation form with 20 samples
+- evaluation_rubric.txt: Detailed scoring guidelines
+- (After evaluation) human_evaluation_results.json: Aggregated statistics
+
+8.4 Status
+----------
+Framework Status: Fully implemented and tested
+Sample Generation: Completed (20 samples ready)
+Evaluator Recruitment: Pending (requires Bengali speakers)
+Results Collection: Awaiting evaluator input
+
+Note: The complete pipeline is production-ready. Actual human evaluation
+scores would require recruiting Bengali-speaking evaluators, which is a
+manual process beyond the automated training pipeline scope.
+
+======================================================================
+9. SAMPLE RESPONSES
+======================================================================
+
+The model generated 5 sample responses demonstrating empathetic
 conversation capabilities. Below are representative examples:
 
 Example 1:
@@ -498,7 +568,7 @@ Required Deliverables Status:
 4. Sample Model Responses:
    Status: COMPLETE
    Location: GeneratedResponses database table + evaluation files
-   Count: 3 responses + 20 human evaluation samples
+   Count: 5 responses + 20 human evaluation samples
 
 5. Evaluation Metrics Table:
    Status: COMPLETE
@@ -702,4 +772,4 @@ END OF REPORT
 
 Generated by: LLaMA Fine-tuning Pipeline
 Experiment ID: 1
-Report Date: 2026-01-09 08:10:20
+Report Date: 2026-01-11 03:58:35
